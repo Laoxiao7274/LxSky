@@ -5,11 +5,15 @@ const { Methods } = require("./Methods");
 
 //玩家数据中的空岛
 class Island {
-    constructor(name, pos, ProtectRange, introduct) {
+    constructor(name, pos, ProtectRange, introduct, permission,sharePermission, invite, share) {
         this.name = name;
         this.pos = pos;
         this.ProtectRange = ProtectRange;
         this.introduct = introduct;
+        this.permission = permission;
+        this.sharePermission = sharePermission;
+        this.invite = invite;
+        this.share = share;
     }
 };
 
@@ -30,7 +34,7 @@ class IsLandCreate {
         const step = conf.get("LandRange");
         let direction = "right";
         let i = 0
-        while (i!=5) {
+        while (i != 5) {
             i++;
             //根据方向添加step
             if (direction == "right") {
@@ -105,7 +109,7 @@ class IsLandCreate {
             y: height,
             z: z
         }
-        const island = new Island(name, pos, protectRange, introduct);
+        const island = new Island(name, pos, protectRange, introduct, conf.get("defultPermission"),conf.get("defultSharePermission"),[],[]);
         const island_data = new IsLandData(player.name, pos, protectRange);
         const IsLandConf = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
         const IsLands = IsLandConf.get("Lands");
@@ -115,15 +119,15 @@ class IsLandCreate {
         const PlayerLand = PlayerConf.get("IsLands");
         PlayerLand.push(island);
         PlayerConf.set("IsLands", PlayerLand);
-        PlayerConf.set("Right","Master");
+        PlayerConf.set("Right", "Master");
         //创建岛屿
-        let {px,py,pz} = Methods.getSkew(filename);
+        let { px, py, pz } = Methods.getSkew(filename);
         const cmd = mc.runcmdEx("structure load " + filename + " " + (x - px) + " " + (height - py) + " " + (z - pz) + " 0_degrees none true true true");
-        if(cmd.success){
+        if (cmd.success) {
             player.tell("已成功为你创建空岛!");
             player.teleport(x, height, z, 0);
         }
-        else{
+        else {
             player.tell("创建空岛失败");
         }
     }

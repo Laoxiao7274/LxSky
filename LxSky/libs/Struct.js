@@ -51,6 +51,10 @@ class Struct {
                 return ele.name;
             }
         }).map((ele)=>{return ele.name});
+        if(sNames.length == 0){
+            player.tell("暂无可初始化的模板!");
+            return;
+        }
         const form = mc.newCustomForm();
         form.setTitle("初始化结构");
         form.addDropdown("请选择需要初始化的结构", sNames);
@@ -74,6 +78,10 @@ class Struct {
                 return ele.name;
             }
         }).map((ele)=>{return ele.name});
+        if(sNames.length == 0){
+            player.tell("暂无可初始化的模板!");
+            return;
+        }
         const form = mc.newCustomForm();
         form.setTitle("中心点选取");
         form.addDropdown("请选择需要初始化的结构", sNames);
@@ -145,6 +153,10 @@ class CustomStruct {
     static delModal(player) {
         const sFile = new JsonConfigFile("./plugins/LxSky/data/Struct.json");
         let sData = sFile.get("CustomStruct");
+        if(sData.length == 0){
+            player.tell("暂无可删除的模板!");
+            return;
+        }
         const form = mc.newSimpleForm();
         form.setTitle("删除模板");
         for (let sdata of sData) {
@@ -169,6 +181,10 @@ class CustomStruct {
     static setModal(player) {
         const sFile = new JsonConfigFile("./plugins/LxSky/data/Struct.json");
         let sData = sFile.get("CustomStruct");
+        if(sData.length == 0){
+            player.tell("暂无可设置的模板!");
+            return;
+        }
         const form = mc.newSimpleForm();
         form.setTitle("设置模板");
         for (let sdata of sData) {

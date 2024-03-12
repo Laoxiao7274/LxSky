@@ -3,6 +3,7 @@
 const { Struct , CustomStruct} = require("./Struct.js");
 const { Methods } = require("./Methods.js");
 const { IsLandCreate } = require("./Island.js");
+const { Share } = require("./Share.js");
 
 class Command {
     static register() {
@@ -90,9 +91,15 @@ class IsMenu{
         form.addInput("请输入你的空岛介绍","空岛介绍");
         player.sendForm(form,(player,data)=>{
             if(data != undefined){
-                const money = CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].money;
-                Methods.reMoney(money);
-                IsLandCreate.createOne(data[1],data[2],player,CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].ModalName);
+                if(Methods.haveOneLand(player,data[1])){
+                    player.tell("你已拥有该名称的岛屿了，请换个名字再来吧!");
+                    return;
+                }
+                else{
+                    const money = CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].money;
+                    Methods.reMoney(money);
+                    IsLandCreate.createOne(data[1],data[2],player,CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].ModalName);
+                }
             }
         });
     }
@@ -100,11 +107,61 @@ class IsMenu{
     static Menu(player){
         const form = mc.newSimpleForm();
         form.setTitle("LxSky空岛菜单");
+        form.addButton("我的空岛");
+        form.addButton("创建空岛");
         player.sendForm(form,(player,data)=>{
             if(data != undefined){
-
+                if(data == 0){
+                    this.MyLandMenu(player);
+                }
+                else if(data == 1){
+                    if(Methods.checkPlayerLandCount(player)){
+                        player.tell("你的空岛数量已满");
+                        return;
+                    }
+                    else{
+                        this.createMenu(player);
+                    }
+                }
             }
         })
+    }
+
+    static MyLandMenu(player){
+        const Lands = Methods.getPlayerLand(player);
+        const LandsName = Lands.map((ele)=>{
+            return ele.name;
+        });
+        const form = mc.newSimpleForm();
+        form.setTitle("我的空岛");
+        for(let LandName of LandsName){
+            form.addButton(LandName);
+        }
+        player.sendForm(form,(player,data)=>{
+            if(data != undefined){
+                const land = Lands.filter((ele)=>{
+                    if(ele.name == LandsName[data]){
+                        return ele;
+                    }
+                })[0];
+                this.LandMenu(player,land);
+            }
+        });
+    }
+
+    static LandMenu(player,land){
+        const form = mc.newSimpleForm();
+        form.setTitle("空岛菜单");
+        form.addButton("成员分享管理");
+        player.sendForm(form,(player,data)=>{
+            if(data != undefined){
+                switch(data){
+                    case 0:
+                        Share.ShareMenu(player,land);
+                        break;
+                }
+            }
+        });
     }
 };
 
