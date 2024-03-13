@@ -5,7 +5,7 @@ const { Methods } = require("./Methods");
 
 //玩家数据中的空岛
 class Island {
-    constructor(name, pos, ProtectRange, introduct, permission,sharePermission, invite, share) {
+    constructor(name, pos, ProtectRange, introduct, defultTp, TpPoint, permission, sharePermission, invite, share) {
         this.name = name;
         this.pos = pos;
         this.ProtectRange = ProtectRange;
@@ -14,6 +14,8 @@ class Island {
         this.sharePermission = sharePermission;
         this.invite = invite;
         this.share = share;
+        this.defultTp = defultTp;
+        this.TpPoint = TpPoint;
     }
 };
 
@@ -54,7 +56,10 @@ class IsLandCreate {
             const IsLands = IsDataConf.get("Lands");
             const checkLand = IsLands.filter((ele) => {
                 if (ele.pos.x == x && ele.pos.z == z) {
-                    return ele;
+                    return true;
+                }
+                else {
+                    return false;
                 }
             })
             if (checkLand.length == 0) {
@@ -109,7 +114,7 @@ class IsLandCreate {
             y: height,
             z: z
         }
-        const island = new Island(name, pos, protectRange, introduct, conf.get("defultPermission"),conf.get("defultSharePermission"),[],[]);
+        const island = new Island(name, pos, protectRange, introduct, pos, [], conf.get("defultPermission"), conf.get("defultSharePermission"), [], []);
         const island_data = new IsLandData(player.name, pos, protectRange);
         const IsLandConf = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
         const IsLands = IsLandConf.get("Lands");

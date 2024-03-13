@@ -4,6 +4,7 @@ const { Struct , CustomStruct} = require("./Struct.js");
 const { Methods } = require("./Methods.js");
 const { IsLandCreate } = require("./Island.js");
 const { Share } = require("./Share.js");
+const { IsLandTP } = require("./IsLandTP.js");
 
 class Command {
     static register() {
@@ -39,6 +40,10 @@ class Command {
 
 class opMenu{
     static First(player){
+        if(!Methods.checkHaveModal()){
+            player.tell("暂时没有模板初始化");
+            return;
+        }
         const form = mc.newSimpleForm();
         form.setTitle("LxSky管理员菜单");
         form.addButton("添加模板");
@@ -152,12 +157,16 @@ class IsMenu{
     static LandMenu(player,land){
         const form = mc.newSimpleForm();
         form.setTitle("空岛菜单");
-        form.addButton("成员分享管理");
+        form.addButton("空岛分享");
+        form.addButton("空岛传送");
         player.sendForm(form,(player,data)=>{
             if(data != undefined){
                 switch(data){
                     case 0:
                         Share.ShareMenu(player,land);
+                        break;
+                    case 1:
+                        IsLandTP.TPMenu(player,land);
                         break;
                 }
             }

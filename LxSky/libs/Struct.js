@@ -48,7 +48,10 @@ class Struct {
         let sData = Methods.getStruct();
         const sNames = sData.filter((ele) => {
             if (ele.init == 0) {
-                return ele.name;
+                return true;
+            }
+            else{
+                return false;
             }
         }).map((ele)=>{return ele.name});
         if(sNames.length == 0){
@@ -75,7 +78,10 @@ class Struct {
         let sData = Methods.getStruct();
         const sNames = sData.filter((ele) => {
             if (ele.init == 0) {
-                return ele.name;
+                return true;
+            }
+            else{
+                return false;
             }
         }).map((ele)=>{return ele.name});
         if(sNames.length == 0){
@@ -127,6 +133,10 @@ class CustomStruct {
                 modals.push(sdata.name);
             }
         }
+        if(modals.length == 0){
+            player.tell("暂无可用的模板");
+            return;
+        }
         const form = mc.newCustomForm();
         form.setTitle("添加模板");
         form.addDropdown("选择模板", modals);
@@ -167,9 +177,13 @@ class CustomStruct {
                 player.sendModalForm(sData[data].name + "删除", "是否确认删除自定义模板" + sData[data].name, "是", "否", (player, res) => {
                     if (res) {
                         sData = sData.filter((ele) => {
-                            return ele.name != sData[data].name;
+                            if(ele.name == sData[data].name){
+                                return false;
+                            }
+                            else{
+                                return true;
+                            }
                         })
-                        log(sData)
                         sFile.set("CustomStruct", sData);
                         player.tell("你已成功删除");
                     }
@@ -216,7 +230,12 @@ class CustomStruct {
             if (data != undefined) {
                 let newsData = sFile.get("CustomStruct");
                 newsData = newsData.filter((ele) => {
-                    return ele.name != inData.name;
+                    if(ele.name == inData.name){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
                 });
                 const newData = new CustomStruct(modals[data[0]], data[1], data[2], Number(data[3]));
                 newsData.push(newData);

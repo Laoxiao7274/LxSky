@@ -63,6 +63,7 @@ class Methods {
         conf.init("LandRange", 1000);
         conf.init("LandProtectRange", 200);
         conf.init("MaxLandCount",3);
+        conf.init("MaxTpPoint",3);
         conf.init("defultPermission",permissions);
         conf.init("defultSharePermission",sharePermissions);
         isConf.init("Lands",[]);
@@ -193,8 +194,18 @@ class Methods {
         return false;
     }
 
+    //TODO判断是否存在初始化模板
+    static checkHaveModal(){
+        const sFile =new JsonConfigFile("./plugins/LxSky/data/Struct.json");
+        const sData = sFile.get("Struct");
+        if(sData.length == 0){
+            return false;
+        }
+        return true;
+    }
+
     //TODO:判断是否存在模板
-    static checkHavaCustomModal(){
+    static checkHaveCustomModal(){
         const sFile =new JsonConfigFile("./plugins/LxSky/data/Struct.json");
         const sData = sFile.get("CustomStruct");
         if(sData.length == 0){
@@ -230,7 +241,10 @@ class Methods {
         const pLands = pFile.get("IsLands");
         const result = pLands.filter((ele)=>{
             if(ele.name == LandName){
-                return ele;
+                return true;
+            }
+            else{
+                return false;
             }
         });
         if(result.length == 0){
@@ -250,7 +264,10 @@ class Methods {
         const SharePlayers = Land.share;
         const result = SharePlayers.filter((ele)=>{
             if(ele.name == sPlayer.name){
-                return ele;
+                return true;
+            }
+            else{
+                return false;
             }
         });
         if(result.length == 0){
@@ -272,7 +289,10 @@ class Methods {
         const sData = sFile.get("Struct");
         const needData = sData.filter((ele)=>{
             if(ele.name == name){
-                return ele;
+                return true;
+            }
+            else{
+                return false;
             }
         });
         const px = needData[0].x;
@@ -328,15 +348,13 @@ class Methods {
     /**
      * @param {Land} Land - 岛屿对象 
      * @param {Player} player - 岛主对象 
-     * @param {Land} newLandData - 新写入的分享数据对象
      */
-    static writeShareLandData(Land,player,newLandData){
+    static writeLandData(Land,player){
         const sFile = new JsonConfigFile("./plugins/LxSky/players/"+player.name+".json");
         let LandData = sFile.get("IsLands");
-        LandData = LandData.filter((ele)=>{
+        LandData = LandData.map((ele)=>{
             if(ele.name == Land.name){
-                ele.share.push(newLandData);
-                return ele;
+                return Land;
             }
             else{
                 return ele;

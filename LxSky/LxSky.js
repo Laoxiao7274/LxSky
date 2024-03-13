@@ -12,9 +12,9 @@ ll.registerPlugin(
 )
 
 mc.listen("onServerStarted",()=>{
-    Struct.ModalFileCheck();//模板文件初始化
     Methods.initStructConfig();//Struct文件初始化
     Methods.initConfig();//配置文件初始化
     Command.register();//命令注册
     Methods.initPlayerDataConfig();//玩家数据文件初始化
+    Struct.ModalFileCheck();//模板文件初始化
 })
