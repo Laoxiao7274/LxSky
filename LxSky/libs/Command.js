@@ -103,7 +103,7 @@ class IsMenu{
                 else{
                     const money = CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].money;
                     Methods.reMoney(money);
-                    IsLandCreate.createOne(data[1],data[2],player,CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].ModalName);
+                    IsLandCreate.createOne(data[1],data[2],player,CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])]);
                 }
             }
         });
@@ -133,7 +133,7 @@ class IsMenu{
     }
 
     static MyLandMenu(player){
-        const Lands = Methods.getPlayerLand(player);
+        const Lands = Methods.getPlayerLand(player.name);
         const LandsName = Lands.map((ele)=>{
             return ele.name;
         });

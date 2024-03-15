@@ -89,7 +89,7 @@ class Methods {
 
     //TODO:获取模板数组下标
     /**
-     * 
+     * 获取模板数组下标
      * @param {string} name - 模板名称
      * @returns 
      */
@@ -112,39 +112,80 @@ class Methods {
         return sData;
     }
 
+    //TODO:获取传送点数组
+    /**
+     * 获取传送点数组
+     * @param {string} MasterName - 岛主名称
+     * @param {string} LandName - 岛屿名
+     */
+    static getPoint(MasterName,LandName){
+        const sFile = new JsonConfigFile("./plugins/LxSky/players/"+MasterName+".json");
+        const LandDatas = sFile.get("IsLands");
+        const needLand = LandDatas.filter((land)=>{
+            if(land.name == LandName){
+                return true;
+            }
+            else{
+                return false;
+            }
+        });
+        return needLand.TpPoint;
+    }
+
+    //TODO:判断传送点是否满了
+    static checkPointFull(MasterName,Land){
+        const sFile = new JsonConfigFile("./plugins/LxSky/players/"+MasterName+".json");
+        const Max = sFile.get("")
+    }
+
     //TODO:获取玩家最大空岛数
     /**
-     * 
-     * @param {Player} player - 玩家对象
+     * 获取玩家最大空岛数
+     * @param {string} name - 玩家名
      * @returns 
      */
-    static getIsLandCount(player){
-        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+player.name+".json");
+    static getIsLandCount(name){
+        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+name+".json");
         return pFile.get("IsLandCount");
     }
 
-    //TODO:根据玩家对象获取玩家岛屿
+    //TODO:根据玩家名获取玩家岛屿
     /**
-     * 
-     * @param {Player} player - 玩家对象
+     * 根据玩家名获取玩家岛屿
+     * @param {string} name - 玩家名
      * @returns 
      */
-    static getPlayerLand(player){
-        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+player.name+".json");
+    static getPlayerLand(name){
+        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+name+".json");
         const pData = pFile.get("IsLands");
         return pData;
     }
 
     //TODO:判断玩家空岛数是否上限
     /**
-     * 
+     * 判断玩家空岛数是否上限
      * @param {Player} player - 玩家对象
      * @returns 
      */
     static checkPlayerLandCount(player){
-        const maxcount = this.getIsLandCount(player);
-        const pLands = this.getPlayerLand(player);
+        const maxcount = this.getIsLandCount(player.name);
+        const pLands = this.getPlayerLand(player.name);
         if(pLands.length < maxcount){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    //TODO:判断岛屿传送点数是否上限
+    /**
+     * 判断岛屿传送点数是否上限
+     * @param {Land} Land - 检查的岛屿 
+     */
+    static checkLandPointCount(Land){
+        const point = Land.TpPoint;
+        if(point.length < Land.PointCount){
             return false;
         }
         else{
@@ -179,7 +220,7 @@ class Methods {
 
     //TODO:检测自定义模板名是否重复
     /**
-     * 
+     * 检测自定义模板名是否重复
      * @param {string} name - 自定义模板名
      * @returns 
      */
@@ -216,7 +257,7 @@ class Methods {
 
     //TODO:判断玩家是否存在岛屿
     /**
-     * 
+     * 判断玩家是否存在岛屿
      * @param {Player} player - 玩家对象
      * @returns 
      */
@@ -229,9 +270,24 @@ class Methods {
         return true;
     }
 
+    //TODO:判断传送点名是否重复
+    /**
+     * 判断传送点名是否重复
+     * @param {string} name - 判断的传送点名
+     * @param {Land} Land - 岛屿对象
+     */
+    static checkSamePoint(name,Land){
+        for(let ele of Land.TpPoint){
+            if(ele.name == name){
+                return truel
+            }
+        }
+        return false;
+    }
+
     //TODO:判断玩家是否存在某个岛屿
     /**
-     * 
+     * 判断玩家是否存在某个岛屿
      * @param {Player} player - 玩家对象
      * @param {string} LandName -岛屿名称
      * @returns 
@@ -257,6 +313,7 @@ class Methods {
 
     //TODO:判断该玩家是否在分享名单中
     /** 
+    * 判断该玩家是否在分享名单中
     * @param { Player } sPlayer - 被分享玩家
     * @param { Land } Land - 当前岛屿   
      */ 
@@ -280,7 +337,7 @@ class Methods {
 
     //TODO:获取模板偏移量
     /**
-     * 
+     * 获取模板偏移量
      * @param {string} name - 模板名称
      * @returns 
      */
@@ -303,7 +360,7 @@ class Methods {
 
     //TODO:让玩家以管理员权限执行命令
     /**
-     * 
+     * 让玩家以管理员权限执行命令
      * @param {string} cmdText - 命令字符串
      * @param {Player} player - 玩家对象
      */
@@ -320,7 +377,7 @@ class Methods {
 
     //TODO:扣除钱
     /**
-     * 
+     * 扣除钱
      * @param {number} money - 扣除金币数
      * @param {Player} player - 玩家对象
      * @returns 
@@ -346,11 +403,12 @@ class Methods {
 
     //TODO:根据岛屿名写入分享岛屿数据
     /**
+     * 根据岛屿名写入分享岛屿数据
      * @param {Land} Land - 岛屿对象 
-     * @param {Player} player - 岛主对象 
+     * @param {string} MasterName - 岛主名称
      */
-    static writeLandData(Land,player){
-        const sFile = new JsonConfigFile("./plugins/LxSky/players/"+player.name+".json");
+    static writeLandData(Land,MasterName){
+        const sFile = new JsonConfigFile("./plugins/LxSky/players/"+MasterName+".json");
         let LandData = sFile.get("IsLands");
         LandData = LandData.map((ele)=>{
             if(ele.name == Land.name){
@@ -361,6 +419,22 @@ class Methods {
             }
         });
         sFile.set("IsLands",LandData);
+    }
+
+    //TODO:判断玩家是否在某个空岛中
+    /**
+     * 判断玩家是否在某个空岛中
+     * @param {Player} player 
+     * @param {Land} Land 
+     */
+    static checkInLand(player,Land){
+        const range = Land.ProtectRange;
+        if(player.blockPos.x <= Land.pos.x + range && player.blockPos.x >= Land.pos.x - range){
+            if(player.blockPos.z <= Land.pos.z + range && player.blockPos.z >= Land.pos.z - range){
+                return true;
+            }
+        }
+        return false;
     }
 };
 

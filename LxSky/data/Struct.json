@@ -1,0 +1,19 @@
+{
+    "Struct": [
+        {
+            "init": 1,
+            "x": 4,
+            "y": 5,
+            "z": 2,
+            "name": "sky"
+        }
+    ],
+    "CustomStruct": [
+        {
+            "ModalName": "sky",
+            "name": "测试模板",
+            "introduct": "测试",
+            "money": 0
+        }
+    ]
+}

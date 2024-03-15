@@ -5,11 +5,12 @@ const { Methods } = require("./Methods");
 
 //玩家数据中的空岛
 class Island {
-    constructor(name, pos, ProtectRange, introduct, defultTp, TpPoint, permission, sharePermission, invite, share) {
+    constructor(name, pos, ProtectRange, introduct, PointCount,defultTp, TpPoint, permission, sharePermission, invite, share) {
         this.name = name;
         this.pos = pos;
         this.ProtectRange = ProtectRange;
         this.introduct = introduct;
+        this.PointCount = PointCount;
         this.permission = permission;
         this.sharePermission = sharePermission;
         this.invite = invite;
@@ -104,37 +105,42 @@ class IsLandCreate {
         }
     }
 
-    static create(x, z, name, introduct, player, filename) {
-        //设置数据文件
-        const conf = new JsonConfigFile("./plugins/LxSky/config.json");
-        const height = conf.get("Height");
-        const protectRange = conf.get("LandProtectRange");
-        const pos = {
-            x: x,
-            y: height,
-            z: z
-        }
-        const island = new Island(name, pos, protectRange, introduct, pos, [], conf.get("defultPermission"), conf.get("defultSharePermission"), [], []);
-        const island_data = new IsLandData(player.name, pos, protectRange);
-        const IsLandConf = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
-        const IsLands = IsLandConf.get("Lands");
-        IsLands.push(island_data);
-        IsLandConf.set("Lands", IsLands);
-        const PlayerConf = new JsonConfigFile("./plugins/LxSky/players/" + player.name + ".json");
-        const PlayerLand = PlayerConf.get("IsLands");
-        PlayerLand.push(island);
-        PlayerConf.set("IsLands", PlayerLand);
-        PlayerConf.set("Right", "Master");
-        //创建岛屿
-        let { px, py, pz } = Methods.getSkew(filename);
-        const cmd = mc.runcmdEx("structure load " + filename + " " + (x - px) + " " + (height - py) + " " + (z - pz) + " 0_degrees none true true true");
-        if (cmd.success) {
-            player.tell("已成功为你创建空岛!");
-            player.teleport(x, height, z, 0);
-        }
-        else {
-            player.tell("创建空岛失败");
-        }
+    static create(x, z, name, introduct, player, CustomModal) {
+        const filename = CustomModal.ModalName;
+        player.sendModalForm("创建岛屿", "是否创建岛屿:\n名称: " + CustomModal.name + "\n介绍: " + CustomModal.introduct, "是", "否", (player, res) => {
+            if (res) {
+                //设置数据文件
+                const conf = new JsonConfigFile("./plugins/LxSky/config.json");
+                const height = conf.get("Height");
+                const protectRange = conf.get("LandProtectRange");
+                const pos = {
+                    x: x,
+                    y: height,
+                    z: z
+                }
+                const island = new Island(name, pos, protectRange, introduct,conf.get("MaxTpPoint"),pos, [], conf.get("defultPermission"), conf.get("defultSharePermission"), [], []);
+                const island_data = new IsLandData(player.name, pos, protectRange);
+                const IsLandConf = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
+                const IsLands = IsLandConf.get("Lands");
+                IsLands.push(island_data);
+                IsLandConf.set("Lands", IsLands);
+                const PlayerConf = new JsonConfigFile("./plugins/LxSky/players/" + player.name + ".json");
+                const PlayerLand = PlayerConf.get("IsLands");
+                PlayerLand.push(island);
+                PlayerConf.set("IsLands", PlayerLand);
+                PlayerConf.set("Right", "Master");
+                //创建岛屿
+                let { px, py, pz } = Methods.getSkew(filename);
+                const cmd = mc.runcmdEx("structure load " + filename + " " + (x - px) + " " + (height - py) + " " + (z - pz) + " 0_degrees none true true true");
+                if (cmd.success) {
+                    player.tell("已成功为你创建空岛!");
+                    player.teleport(x, height, z, 0);
+                }
+                else {
+                    player.tell("创建空岛失败");
+                }
+            }
+        });
     }
 }
 
