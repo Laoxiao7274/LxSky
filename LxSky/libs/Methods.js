@@ -167,9 +167,9 @@ class Methods {
      * @param {Player} player - 玩家对象
      * @returns 
      */
-    static checkPlayerLandCount(player){
-        const maxcount = this.getIsLandCount(player.name);
-        const pLands = this.getPlayerLand(player.name);
+    static checkPlayerLandCount(playerName){
+        const maxcount = this.getIsLandCount(playerName);
+        const pLands = this.getPlayerLand(playerName);
         if(pLands.length < maxcount){
             return false;
         }
@@ -311,6 +311,21 @@ class Methods {
         }
     }
 
+    //TODO:判断玩家是否为某个岛屿成员
+    /**
+     * 判断玩家是否为某个岛屿成员
+     * @param {string} InName - 邀请的成员名
+     * @param {Land} Land - 判断岛屿
+     */
+    static checkOneMember(InName,Land){
+        for(let land of Land.invite){
+            if(InName == land){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //TODO:判断该玩家是否在分享名单中
     /** 
     * 判断该玩家是否在分享名单中
@@ -333,6 +348,16 @@ class Methods {
         else{
             return true;
         }
+    }
+
+    //TODO:获取玩家身份
+    /**
+     * 获取玩家身份
+     * @param {*} PlayerName 
+     */
+    static getPlayerRight(PlayerName){
+        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+PlayerName+".json");
+        return pFile.get("Right");
     }
 
     //TODO:获取模板偏移量
@@ -401,9 +426,9 @@ class Methods {
         }
     }
 
-    //TODO:根据岛屿名写入分享岛屿数据
+    //TODO:根据岛屿名写入岛屿数据
     /**
-     * 根据岛屿名写入分享岛屿数据
+     * 根据岛屿名写入岛屿数据
      * @param {Land} Land - 岛屿对象 
      * @param {string} MasterName - 岛主名称
      */
@@ -418,6 +443,26 @@ class Methods {
                 return ele;
             }
         });
+        sFile.set("IsLands",LandData);
+    }
+
+    //TODO:根据岛屿名删除岛屿数据
+    /**
+     * 根据岛屿名删除岛屿数据
+     * @param {Land} Land - 岛屿数据
+     * @param {string} MasterName  - 岛主名称
+     */
+    static delLandData(Land,MasterName){
+        const sFile = new JsonConfigFile("./plugins/LxSky/players/"+MasterName+".json");
+        let LandData = sFile.get("IsLands");
+        LandData = LandData.filter((ele)=>{
+            if(ele.name == Land.name){
+                return false;
+            }
+            else{
+                return true;
+            }
+        })
         sFile.set("IsLands",LandData);
     }
 

@@ -5,7 +5,7 @@ const { Methods } = require("./Methods");
 
 //玩家数据中的空岛
 class Island {
-    constructor(name, pos, ProtectRange, introduct, PointCount,defultTp, TpPoint, permission, sharePermission, invite, share) {
+    constructor(name, pos, ProtectRange, introduct, PointCount,defultTp, TpPoint, permission, sharePermission, member, share) {
         this.name = name;
         this.pos = pos;
         this.ProtectRange = ProtectRange;
@@ -13,7 +13,7 @@ class Island {
         this.PointCount = PointCount;
         this.permission = permission;
         this.sharePermission = sharePermission;
-        this.invite = invite;
+        this.member = member;
         this.share = share;
         this.defultTp = defultTp;
         this.TpPoint = TpPoint;

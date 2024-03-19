@@ -11,20 +11,20 @@ class IsLandTP {
     static TPMenu(player, Land) {
         const form = mc.newSimpleForm();
         form.setTitle("空岛传送菜单");
+        form.addButton("空岛传送点菜单");
         form.addButton("返回默认传送点");
         form.addButton("设置默认传送点");
-        form.addButton("空岛传送点菜单");
         player.sendForm(form, (player, data) => {
             if (data != undefined) {
                 switch (data) {
                     case 0:
-                        this.backDefult(player, Land);
+                        Point.PointMenu(player, Land);
                         break;
                     case 1:
                         this.setDefult(player, Land);
                         break;
                     case 2:
-                        Point.PointMenu(player, Land);
+                        this.backDefult(player, Land);
                         break;
                 }
             }
