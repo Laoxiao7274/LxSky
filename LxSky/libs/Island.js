@@ -22,8 +22,9 @@ class Island {
 
 //data中的空岛
 class IsLandData {
-    constructor(Mastername, pos, ProtectRange) {
+    constructor(Mastername, LandName,pos, ProtectRange) {
         this.Mastername = Mastername;
+        this.LandName = LandName;
         this.pos = pos;
         this.ProtectRange = ProtectRange;
     }
@@ -119,7 +120,7 @@ class IsLandCreate {
                     z: z
                 }
                 const island = new Island(name, pos, protectRange, introduct,conf.get("MaxTpPoint"),pos, [], conf.get("defultPermission"), conf.get("defultSharePermission"), [], []);
-                const island_data = new IsLandData(player.name, pos, protectRange);
+                const island_data = new IsLandData(player.name, name,pos, protectRange);
                 const IsLandConf = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
                 const IsLands = IsLandConf.get("Lands");
                 IsLands.push(island_data);

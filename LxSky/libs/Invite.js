@@ -28,12 +28,12 @@ class InviteMenu {
             if (data != undefined) {
                 switch (data) {
                     case 0:
-                        this.addMember(player, Land);
                         break;
                     case 1:
-                        this.delMember(player,Land);
+                        this.addMember(player, Land);
                         break;
                     case 2:
+                        this.delMember(player,Land);
                         break;
                 }
             }
@@ -42,8 +42,8 @@ class InviteMenu {
 
     static addMember(player, Land) {
         const OnlinePlayers = mc.getOnlinePlayers();
-        const OnlinePlayerNames = OnlinePlayers.map((ele) => { return ele.name; });
-        //移除自己和已经存在的成员并且用药岛屿的玩家
+        let OnlinePlayerNames = OnlinePlayers.map((ele) => { return ele.name; });
+        //移除自己和已经存在的成员并且拥有岛屿的玩家
         OnlinePlayerNames = OnlinePlayerNames.filter((ele)=>{
             if(ele == player.name||Methods.getPlayerRight != "none"){
                 return false;

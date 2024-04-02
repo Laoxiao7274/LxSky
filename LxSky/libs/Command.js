@@ -181,6 +181,9 @@ class IsMenu {
                     case 2:
                         InviteMenu.Menu(player, land);
                         break;
+                    case 3:
+                        this.ManageLandMenu(player,land);
+                        break;
                 }
             }
         });
@@ -200,6 +203,7 @@ class IsMenu {
                         ManageLand.DeleteLand(player,Land);
                         break;
                     case 1:
+                        ManageLand.TransferLand(player,Land);
                         break;
                     case 2:
                         break;

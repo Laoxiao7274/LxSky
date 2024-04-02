@@ -64,6 +64,7 @@ class Methods {
         conf.init("LandProtectRange", 200);
         conf.init("MaxLandCount",3);
         conf.init("MaxTpPoint",3);
+        conf.init("worldPermission",permissions);
         conf.init("defultPermission",permissions);
         conf.init("defultSharePermission",sharePermissions);
         isConf.init("Lands",[]);
@@ -454,6 +455,7 @@ class Methods {
      */
     static delLandData(Land,MasterName){
         const sFile = new JsonConfigFile("./plugins/LxSky/players/"+MasterName+".json");
+        const landFile = new JsonConfigFile("./plugins/LxSky/data/IsData.json");
         let LandData = sFile.get("IsLands");
         LandData = LandData.filter((ele)=>{
             if(ele.name == Land.name){
@@ -462,8 +464,40 @@ class Methods {
             else{
                 return true;
             }
-        })
+        });
         sFile.set("IsLands",LandData);
+        let AllLandData = landFile.get("Lands");
+        AllLandData = AllLandData.filter((ele)=>{
+            if(ele.LandName == Land.name&&ele.Mastername == MasterName){
+                return false;
+            }
+            else{
+                return true;
+            }
+        });
+        landFile.set("Lands",AllLandData);
+    }
+    
+    //TODO:根据岛屿名转让data岛屿数据
+    /**
+     * 根据岛屿名转让data岛屿数据
+     * @param {string} MasterName - 转让前的岛主名
+     * @param {string} TransferName - 被转让收到岛屿的玩家名
+     * @param {Land} Land - data岛屿数据
+     */
+    static transferLand(MasterName,TransferName,Land){
+        const dataFile = new JsonConfigFile('./plugins/LxSky/data/IsData.json');
+        let Data = dataFile.get("Lands");
+        Data.map((ele)=>{
+            if(ele.Mastername == MasterName&&ele.LandName == Land.name){
+                ele.Mastername = TransferName;
+                return ele;
+            }
+            else{
+                return ele;
+            }
+        })
+        dataFile.set("Lands",Data);
     }
 
     //TODO:判断玩家是否在某个空岛中

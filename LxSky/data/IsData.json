@@ -2,6 +2,7 @@
     "Lands": [
         {
             "Mastername": "Laoxiao7274",
+            "LandName": "test",
             "pos": {
                 "x": 1000,
                 "y": 20,
@@ -11,17 +12,9 @@
         },
         {
             "Mastername": "Laoxiao7274",
+            "LandName": "新空岛",
             "pos": {
                 "x": 1000,
-                "y": 20,
-                "z": -1000
-            },
-            "ProtectRange": 200
-        },
-        {
-            "Mastername": "Laoxiao7274",
-            "pos": {
-                "x": 0,
                 "y": 20,
                 "z": -1000
             },
