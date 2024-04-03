@@ -20,7 +20,7 @@ class Member {
 class InviteMenu {
     static Menu(player, Land) {
         const form = mc.newSimpleForm();
-        form.addButton("成员菜单");
+        form.setTitle("成员菜单");
         form.addButton("添加成员");
         form.addButton("删除成员");
         form.addButton("成员管理");
@@ -28,12 +28,12 @@ class InviteMenu {
             if (data != undefined) {
                 switch (data) {
                     case 0:
-                        break;
-                    case 1:
                         this.addMember(player, Land);
                         break;
-                    case 2:
+                    case 1:
                         this.delMember(player,Land);
+                        break;
+                    case 2:
                         break;
                 }
             }

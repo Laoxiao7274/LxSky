@@ -21,10 +21,10 @@ class IsLandTP {
                         Point.PointMenu(player, Land);
                         break;
                     case 1:
-                        this.setDefult(player, Land);
+                        this.backDefult(player, Land);
                         break;
                     case 2:
-                        this.backDefult(player, Land);
+                        this.setDefult(player, Land);
                         break;
                 }
             }

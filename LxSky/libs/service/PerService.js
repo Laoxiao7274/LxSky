@@ -3,15 +3,14 @@
 const {Methods} = require('../Methods.js');
 
 class PerMethods{
-    //TODO:获取玩家所在岛屿
+    //TODO:获取玩家操作实体所在岛屿
     /**
-     * 获取玩家所在岛屿
+     * 获取玩家操作实体所在岛屿
      * 存在返回岛屿对象
      * 不存在返回none
-     * @param {Player} player - 玩家对象 
+     * @param {pos} pos - 坐标对象 
      */
-    static getPosLand(player){
-        const pos = player.blockPos;
+    static getPosLand(pos){
         const LandFile = new JsonConfigFile('./plugins/LxSky/data/IsData.json');
         const LandData = LandFile.get("Lands");
         for(let land of LandData){

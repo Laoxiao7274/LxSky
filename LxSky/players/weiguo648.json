@@ -3,14 +3,14 @@
     "IsLandCount": 3,
     "IsLands": [
         {
-            "name": "新空岛",
+            "name": "test",
             "pos": {
                 "x": 1000,
                 "y": 20,
-                "z": -1000
+                "z": 0
             },
             "ProtectRange": 200,
-            "introduct": "test ",
+            "introduct": "test",
             "PointCount": 3,
             "permission": {
                 "BREAK_BLOCK": false,
@@ -67,7 +67,7 @@
             "defultTp": {
                 "x": 1000,
                 "y": 20,
-                "z": -1000
+                "z": 0
             },
             "TpPoint": []
         }

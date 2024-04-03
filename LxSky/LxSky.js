@@ -18,11 +18,6 @@ mc.listen("onServerStarted",()=>{
     Command.register();//命令注册
     Methods.initPlayerDataConfig();//玩家数据文件初始化
     Struct.ModalFileCheck();//模板文件初始化
+    Permission.Listen();//权限事件监听
 })
 
-mc.listen("onPlaceBlock",(player,block)=>{
-    if(!Permission.checkPermission(player,"PLACE_BLOCK")){
-        player.tell("你没有权限这么做!");
-        return false;
-    }
-})
