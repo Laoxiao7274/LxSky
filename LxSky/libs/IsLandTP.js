@@ -1,7 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
 
-const { Methods } = require("./Methods");
+const { IsTPService } = require("./service/IsTPService");
 
 
 
@@ -37,7 +37,7 @@ class IsLandTP {
     }
 
     static setDefult(player, Land) {
-        if (!Methods.checkInLand(player, Land)) {
+        if (!IsTPService.checkInLand(player, Land)) {
             player.tell("你不在该岛屿范围内");
             return;
         }
@@ -48,7 +48,7 @@ class IsLandTP {
                     y: player.blockPos.y,
                     z: player.blockPos.z
                 }
-                Methods.writeLandData(Land, player.name);
+                IsTPService.writeLandData(Land, player.name);
                 player.tell("已为你成功设置");
             }
         });
@@ -110,7 +110,7 @@ class Point {
     }
 
     static CreateMenu(player, Land) {
-        if (Methods.checkLandPointCount(Land)) {
+        if (IsTPService.checkLandPointCount(Land)) {
             player.tell("你的传送点数已满");
             return;
         }
@@ -121,11 +121,11 @@ class Point {
             form.addInput("请输入传送点介绍", "请输入传送点介绍");
             player.sendForm(form, (player, data) => {
                 if (data != undefined) {
-                    if(Methods.checkSamePoint(data[0],Land)){
+                    if(IsTPService.checkSamePoint(data[0],Land)){
                         player.tell("该传送点名已存在！");
                         return;
                     }
-                    if(!Methods.checkInLand(player,Land)){
+                    if(!IsTPService.checkInLand(player,Land)){
                         player.tell("目前你不在该空岛中!");
                         return;
                     }
@@ -139,7 +139,7 @@ class Point {
                                 z: player.blockPos.z,
                                 dimid: player.blockPos.dimid
                             });
-                            Methods.writeLandData(Land, player.name);
+                            IsTPService.writeLandData(Land, player.name);
                             player.tell("你已成功设置!");
                         }
                     });
@@ -172,7 +172,7 @@ class Point {
                                 return true;
                             }
                         });
-                        Methods.writeLandData(Land,player.name);
+                        IsTPService.writeLandData(Land,player.name);
                         player.tell("已为你删除该传送点!");
                     }
                 });

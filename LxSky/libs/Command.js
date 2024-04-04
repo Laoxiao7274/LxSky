@@ -1,12 +1,13 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
 const { Struct, CustomStruct } = require("./Struct.js");
-const { Methods } = require("./Methods.js");
+const { CmdMethods } = require('./service/CmdService.js')
 const { IsLandCreate } = require("./Island.js");
 const { Share } = require("./Share.js");
 const { IsLandTP } = require("./IsLandTP.js");
 const { InviteMenu } = require("./Invite.js");
 const { ManageLand } = require("./ManageLand.js");
+const { Setting } = require("./Setting.js");
 
 class Command {
     static register() {
@@ -42,7 +43,7 @@ class Command {
 
 class opMenu {
     static First(player) {
-        if (!Methods.checkHaveModal()) {
+        if (!CmdMethods.checkHaveModal()) {
             player.tell("暂时没有模板初始化");
             return;
         }
@@ -65,6 +66,7 @@ class opMenu {
                         CustomStruct.delModal(player);
                         break;
                     case 3:
+                        Setting.Form(player);
                         break;
                 }
             }
@@ -74,16 +76,20 @@ class opMenu {
 
 class IsMenu {
     static Transfer(player) {
-        if (Methods.haveIsland(player)) {
-            this.Menu(player);
-        }
-        else {
-            this.createMenu(player);
+        switch(CmdMethods.getPlayerRight(player)){
+            case "Master":
+                this.Menu(player);
+                break;
+            case "Member":
+                break;
+            case "none":
+                this.createMenu(player);
+                break;
         }
     }
 
     static createMenu(player) {
-        const CustomStructs = Methods.getCustomModal();
+        const CustomStructs = CmdMethods.getCustomModal();
         if (CustomStructs.length == 0) {
             player.tell("暂时没有模板，无法创建空岛");
             return;
@@ -98,14 +104,14 @@ class IsMenu {
         form.addInput("请输入你的空岛介绍", "空岛介绍");
         player.sendForm(form, (player, data) => {
             if (data != undefined) {
-                if (Methods.haveOneLand(player, data[1])) {
+                if (CmdMethods.haveOneLand(player, data[1])) {
                     player.tell("你已拥有该名称的岛屿了，请换个名字再来吧!");
                     return;
                 }
                 else {
-                    const money = CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])].money;
-                    Methods.reMoney(money);
-                    IsLandCreate.createOne(data[1], data[2], player, CustomStructs[Methods.getCustomModalIndex(CustomNames[data[0]])]);
+                    const money = CustomStructs[CmdMethods.getCustomModalIndex(CustomNames[data[0]])].money;
+                    CmdMethods.reMoney(money,player);
+                    IsLandCreate.createOne(data[1], data[2], player, CustomStructs[CmdMethods.getCustomModalIndex(CustomNames[data[0]])]);
                 }
             }
         });
@@ -124,7 +130,7 @@ class IsMenu {
                         this.MyLandMenu(player);
                         break;
                     case 1:
-                        if (Methods.checkPlayerLandCount(player.name)) {
+                        if (CmdMethods.checkPlayerLandCount(player.name)) {
                             player.tell("你的空岛数量已满");
                             return;
                         }
@@ -141,7 +147,7 @@ class IsMenu {
     }
 
     static MyLandMenu(player) {
-        const Lands = Methods.getPlayerLand(player.name);
+        const Lands = CmdMethods.getPlayerLand(player.name);
         const LandsName = Lands.map((ele) => {
             return ele.name;
         });
@@ -194,8 +200,8 @@ class IsMenu {
         form.setTitle("岛屿管理");
         form.addButton("删除岛屿");
         form.addButton("转让岛屿");
-        form.addButton("权限设置");
-        form.addButton("共享设置");
+        form.addButton("岛屿权限设置");
+        form.addButton("共享权限设置");
         player.sendForm(form,(player,data)=>{
             if(data != undefined){
                 switch(data){
@@ -206,13 +212,16 @@ class IsMenu {
                         ManageLand.TransferLand(player,Land);
                         break;
                     case 2:
+                        ManageLand.PerSetting(player,Land);
                         break;
                     case 3:
+                        ManageLand.ShareSetting(player,Land);
                         break;
                 }
             }
         });
     }
+    
 };
 
 module.exports = { Command };

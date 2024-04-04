@@ -1,8 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
-const {Methods} = require('../Methods.js');
 
-class PerMethods{
+class PerMethods {
     //TODO:获取玩家操作实体所在岛屿
     /**
      * 获取玩家操作实体所在岛屿
@@ -10,21 +9,21 @@ class PerMethods{
      * 不存在返回none
      * @param {pos} pos - 坐标对象 
      */
-    static getPosLand(pos){
+    static getPosLand(pos) {
         const LandFile = new JsonConfigFile('./plugins/LxSky/data/IsData.json');
         const LandData = LandFile.get("Lands");
-        for(let land of LandData){
+        for (let land of LandData) {
             const LandPos = land.pos;
             const range = land.ProtectRange;
-            if(pos.x <= LandPos.x+range && pos.x>= LandPos.x-range && pos.z <= LandPos.z+range && pos.z>= LandPos.z-range){
+            if (pos.x <= LandPos.x + range && pos.x >= LandPos.x - range && pos.z <= LandPos.z + range && pos.z >= LandPos.z - range) {
                 const MasterName = land.Mastername;
                 const LandName = land.LandName;
-                const MasterLands = Methods.getPlayerLand(MasterName);
-                return MasterLands.filter((ele)=>{
-                    if(ele.name == LandName){
+                const MasterLands = this.getPlayerLand(MasterName);
+                return MasterLands.filter((ele) => {
+                    if (ele.name == LandName) {
                         return true;
                     }
-                    else{
+                    else {
                         return false;
                     }
                 })[0];
@@ -41,21 +40,21 @@ class PerMethods{
      * @param {Pos} pos - 岛屿中心
      * @returns 
      */
-    static haveOneLand(player,LandName,pos){
-        const pFile = new JsonConfigFile("./plugins/LxSky/players/"+player.name+".json");
+    static haveOneLand(player, LandName, pos) {
+        const pFile = new JsonConfigFile("./plugins/LxSky/players/" + player.name + ".json");
         const pLands = pFile.get("IsLands");
-        const result = pLands.filter((ele)=>{
-            if(ele.name == LandName&&pos.x == ele.pos.x&&pos.z == ele.pos.z){
+        const result = pLands.filter((ele) => {
+            if (ele.name == LandName && pos.x == ele.pos.x && pos.z == ele.pos.z) {
                 return true;
             }
-            else{
+            else {
                 return false;
             }
         });
-        if(result.length == 0){
+        if (result.length == 0) {
             return false;
         }
-        else{
+        else {
             return true;
         }
     }
@@ -66,11 +65,11 @@ class PerMethods{
      * @param {Player} player - 玩家对象 
      * @param {Land} Land - 岛屿对象
      */
-    static CheckShare(player,Land,PerName){
+    static CheckShare(player, Land, PerName) {
         const SharePlayers = Land.share;
-        for(let sPlayer of SharePlayers){
-            if(player.name == sPlayer.name){
-                if(sPlayer.permission[PerName]){
+        for (let sPlayer of SharePlayers) {
+            if (player.name == sPlayer.name) {
+                if (sPlayer.permission[PerName]) {
                     return true;
                 }
             }
@@ -86,11 +85,11 @@ class PerMethods{
      * @param {string} PerName - 要检测的权限名
      * @returns 
      */
-    static CheckMember(player,Land,PerName){
+    static CheckMember(player, Land, PerName) {
         const MemberPlayers = Land.member;
-        for(let mPlayer of MemberPlayers){
-            if(player.name == mPlayer.name){
-                if(mPlayer.Permission[PerName]){
+        for (let mPlayer of MemberPlayers) {
+            if (player.name == mPlayer.name) {
+                if (mPlayer.Permission[PerName]) {
                     return true;
                 }
             }
@@ -105,11 +104,11 @@ class PerMethods{
      * @param {string} PerName - 要检测的权限名
      * @returns 
      */
-    static CheckPer(Land,PerName){
-        if(Land.permission[PerName]){
+    static CheckPer(Land, PerName) {
+        if (Land.permission[PerName]) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
@@ -120,16 +119,28 @@ class PerMethods{
      * @param {string} PerName - 要检测的权限名
      * @returns 
      */
-    static CheckWorldPer(PerName){
+    static CheckWorldPer(PerName) {
         const conf = new JsonConfigFile('./plugins/LxSky/config.json');
         const pers = conf.get("worldPermission");
-        if(pers[PerName]){
+        if (pers[PerName]) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
+
+    //TODO:根据玩家名获取玩家岛屿
+    /**
+     * 根据玩家名获取玩家岛屿
+     * @param {string} name - 玩家名
+     * @returns 
+     */
+    static getPlayerLand(name) {
+        const pFile = new JsonConfigFile("./plugins/LxSky/players/" + name + ".json");
+        const pData = pFile.get("IsLands");
+        return pData;
+    }
 };
 
-module.exports = {PerMethods}
+module.exports = { PerMethods }

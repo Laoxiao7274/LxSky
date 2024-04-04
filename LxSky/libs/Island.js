@@ -1,7 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
 
-const { Methods } = require("./Methods");
+const { IslandMethods } = require("./service/IslandService.js");
 
 //玩家数据中的空岛
 class Island {
@@ -131,7 +131,7 @@ class IsLandCreate {
                 PlayerConf.set("IsLands", PlayerLand);
                 PlayerConf.set("Right", "Master");
                 //创建岛屿
-                let { px, py, pz } = Methods.getSkew(filename);
+                let { px, py, pz } = IslandMethods.getSkew(filename);
                 const cmd = mc.runcmdEx("structure load " + filename + " " + (x - px) + " " + (height - py) + " " + (z - pz) + " 0_degrees none true true true");
                 if (cmd.success) {
                     player.tell("已成功为你创建空岛!");

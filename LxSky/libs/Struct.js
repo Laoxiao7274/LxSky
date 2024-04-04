@@ -1,7 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
 
-const { Methods } = require("./Methods.js");
+const { StructService } = require("./service/StructService.js");
 
 class Struct {
     constructor(init, x, y, z, name) {
@@ -45,7 +45,7 @@ class Struct {
     }
 
     static initStruct(player) {
-        let sData = Methods.getStruct();
+        let sData = StructService.getStruct();
         const sNames = sData.filter((ele) => {
             if (ele.init == 0) {
                 return true;
@@ -75,7 +75,7 @@ class Struct {
     }
 
     static chooseCenter(player) {
-        let sData = Methods.getStruct();
+        let sData = StructService.getStruct();
         const sNames = sData.filter((ele) => {
             if (ele.init == 0) {
                 return true;
@@ -145,7 +145,7 @@ class CustomStruct {
         form.addInput("消耗金币", "所需金币数(0为没有)");
         player.sendForm(form, (player, data) => {
             if (data != undefined) {
-                if (Methods.checkCustomStructName(data[1])) {
+                if (StructService.checkCustomStructName(data[1])) {
                     player.tell("该自定义名称已存在!");
                     return;
                 }
@@ -222,7 +222,7 @@ class CustomStruct {
         }
         const form = mc.newCustomForm();
         form.setTitle("设置模板");
-        form.addDropdown("选择模板", modals, Methods.getCustomModalIndex(inData.name));
+        form.addDropdown("选择模板", modals, StructService.getCustomModalIndex(inData.name));
         form.addInput("模板名称", "请输入自定义模板名称", inData.name);
         form.addInput("模板介绍", "请输入自定义模板介绍", inData.introduct);
         form.addInput("消耗金币", "所需金币数(0为没有)", String(inData.money));

@@ -7,7 +7,7 @@
     "MaxLandCount": 3,
     "MaxTpPoint": 3,
     "worldPermission": {
-        "BREAK_BLOCK": false,
+        "BREAK_BLOCK": true,
         "PLACE_BLOCK": false,
         "DROP_ITEM": true,
         "TAKE_ITEM": true,

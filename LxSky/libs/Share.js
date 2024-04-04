@@ -1,6 +1,6 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
-const { Methods } = require("./Methods.js");
+const { ShareService } = require("./service/ShareService.js");
 
 class Share {
     constructor(name, permission) {
@@ -35,7 +35,7 @@ class Share {
     static AddShareMenu(player, Land) {
         const OnlinePlayers = mc.getOnlinePlayers();
         const needPlayers = OnlinePlayers.filter((ele) => {
-            if (!Methods.hasSharePlayer(ele, Land) && ele.name != player.name) {
+            if (!ShareService.hasSharePlayer(ele, Land) && ele.name != player.name) {
                 return true;
             }
             else {
@@ -57,7 +57,7 @@ class Share {
                 const sharePlayerName = DropDown[data[0]];
                 const newShareData = new Share(sharePlayerName, Land.sharePermission);
                 Land.share.push(newShareData);
-                Methods.writeLandData(Land, player);
+                ShareService.writeLandData(Land, player);
                 player.tell("添加成功！");
             }
         });
@@ -84,7 +84,7 @@ class Share {
                                 return false;
                             }
                         });
-                        Methods.writeLandData(Land, player);
+                        ShareService.writeLandData(Land, player);
                         player.tell("你已成功删除!");
                     }
                 });

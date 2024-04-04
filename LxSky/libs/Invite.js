@@ -1,7 +1,7 @@
 // LiteLoader-AIDS automatic generated
 /// <reference path="d:\BDS_api/dts/llaids/src/index.d.ts"/> 
 
-const { Methods } = require("./Methods");
+const { InviteMethods } = require('./service/InviteService.js')
 
 class ManagePer {
     constructor() {
@@ -45,7 +45,7 @@ class InviteMenu {
         let OnlinePlayerNames = OnlinePlayers.map((ele) => { return ele.name; });
         //移除自己和已经存在的成员并且拥有岛屿的玩家
         OnlinePlayerNames = OnlinePlayerNames.filter((ele)=>{
-            if(ele == player.name||Methods.getPlayerRight != "none"){
+            if(ele == player.name||InviteMethods.getPlayerRight(ele.name) != "none"){
                 return false;
             }
             else{
@@ -68,7 +68,7 @@ class InviteMenu {
                         let pos = Land.defultTp;
                         pos = new IntPos(pos.x,pos.y,pos.z,0);
                         Land.invite.push(MemberPlayerName);
-                        Methods.writeLandData(Land,player.name);
+                        InviteMethods.writeLandData(Land,player.name);
                         MemberFile.set("Right","Member");
                         MemberFile.set("IsLands",mData);
                         MemberPlayer.teleport(pos);
@@ -101,7 +101,7 @@ class InviteMenu {
                             }
                         });
                         Land.invite = newMembers;
-                        Methods.writeLandData(Land,player.name);
+                        InviteMethods.writeLandData(Land,player.name);
                         const mFile = new JsonConfigFile("./plugins/LxSky/players/"+members[data]+".json");
                         mFile.set("Right","none");
                         mFile.set("IsLands",[]);
